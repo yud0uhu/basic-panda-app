@@ -4,6 +4,9 @@
 
 - [Panda CSS - Chakra UI の Zero Runtime CSS フレームワーク](https://zenn.dev/cybozu_frontend/articles/panda-is-coming)
 
+- [プロジェクトへの導入方法](https://panda-css.com/docs/installation/nextjs?value=pages-dir)
+  - styled-sytemは自動生成されるため、gitignore推奨
+
 ## 基本文法
 
 `className` の後に`css({})`とすることで css を記述することができる
@@ -20,6 +23,24 @@ function Example() {
     </div>
   );
 }
+```
+
+Type SafeかつVS Codeでの補間に対応
+![image](https://github.com/yud0uhu/basic-panda-app/assets/60646787/80981ac2-8149-4e15-aaf6-0c0d36f56142)
+
+- `styled-system/css`ディレクトリは、`yarn panda codegen`でビルドした結果出力される
+
+```css
+// styled-sytem/style.css
+@layer reset, base, tokens, recipes, utilities;
+
+@import "./reset.css";
+
+@import "./global.css";
+
+@import "./tokens/index.css";
+
+@import "./tokens/keyframes.css";
 ```
 
 ## Dynamic styling
