@@ -5,7 +5,7 @@
 - [Panda CSS - Chakra UI の Zero Runtime CSS フレームワーク](https://zenn.dev/cybozu_frontend/articles/panda-is-coming)
 
 - [プロジェクトへの導入方法](https://panda-css.com/docs/installation/nextjs?value=pages-dir)
-  - styled-sytemは自動生成されるため、gitignore推奨
+  - styled-sytem は自動生成されるため、gitignore 推奨
 
 ## 基本文法
 
@@ -25,7 +25,7 @@ function Example() {
 }
 ```
 
-Type SafeかつVS Codeでの補間に対応
+Type Safe かつ VS Code での補間に対応
 ![image](https://github.com/yud0uhu/basic-panda-app/assets/60646787/80981ac2-8149-4e15-aaf6-0c0d36f56142)
 
 - `styled-system/css`ディレクトリは、`yarn panda codegen`でビルドした結果出力される
@@ -45,7 +45,19 @@ Type SafeかつVS Codeでの補間に対応
 
 ## Dynamic styling
 
-静的 CSS のみサポートしている
+Panda CSS は静的解析を行った上でのビルドを前提としている
+そのため、ビルド時に静的に分析できない値を使用する(ランタイムの値に依存する)と、意図しないスタイル値が出力される可能性がある
+
+例えば、条件分岐を含めた静的解析では以下の点に注意する
+
+- 同じファイル内で定義されていない変数
+- 関数呼び出しの結果として得られる変数 (例`const color = getColor()` )
+
+[Referenced values](https://panda-css.com/docs/guides/dynamic-styling#referenced-values) より
+
+**参考資料**
+
+- [Panda CSS の出力結果から注意点を学ぶ](https://zenn.dev/cybozu_frontend/articles/panda-output#runtime-conditions)
 
 ```tsx
 // この書き方はできない
@@ -163,7 +175,8 @@ const App = () => {
 ```
 
 **参考資料**
-[Dynamic styling](https://panda-css.com/docs/guides/dynamic-styling)
+
+- [Dynamic styling](https://panda-css.com/docs/guides/dynamic-styling)
 
 ## 例 : 動的に style を書き換える
 
