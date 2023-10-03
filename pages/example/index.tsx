@@ -1,4 +1,4 @@
-import PandaButton from "@/examples/components/PandaButton";
+import PandaButton from "@/example/components/PandaButton";
 
 const App = () => {
   return (
