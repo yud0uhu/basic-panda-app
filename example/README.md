@@ -31,7 +31,7 @@ Type Safe かつ VS Code での補間に対応
 - `styled-system/css`ディレクトリは、`yarn panda codegen`でビルドした結果出力される
 
 ```css
-// styled-sytem/style.css
+/* styled-sytem/style.css */
 @layer reset, base, tokens, recipes, utilities;
 
 @import "./reset.css";
@@ -42,6 +42,15 @@ Type Safe かつ VS Code での補間に対応
 
 @import "./tokens/keyframes.css";
 ```
+
+それぞれには以下の内容が含まれている
+
+> - reset.css : リセット CSS (約 2.8KB)。margin/padding の打ち消しや box-sizing 設定など
+> - global.css : グローバル CSS（約 700B）。デフォルトで一部 CSS 変数の定義が含まれる。
+> - tokens/index.css : Design Token (約 15KB)。カラーやフォントサイズなどの CSS 変数の定義。サイズ大きめ。
+> - tokens/keyframes.css : アニメーションで使うための keyframe 定義（約 600B）。
+
+[Panda CSS の出力結果から注意点を学ぶ](https://zenn.dev/cybozu_frontend/articles/panda-output) より
 
 ## Dynamic styling
 
@@ -60,7 +69,7 @@ Panda CSS は静的解析を行った上でのビルドを前提としている
 - [Panda CSS の出力結果から注意点を学ぶ](https://zenn.dev/cybozu_frontend/articles/panda-output#runtime-conditions)
 
 ```tsx
-// この書き方はできない
+// ビルド時に値を決定できない(ランタイムの値に直接依存している)ため、cssを出力できない
 import { useState } from "react";
 import { css } from "../styled-system/css";
 
@@ -79,7 +88,7 @@ const App = () => {
 ```
 
 ```tsx
-// この書き方はできる
+// ビルド時に値が決定されるため、cssを出力できる
 import { defineConfig } from "@pandacss/dev";
 
 export default defineConfig({
@@ -96,7 +105,7 @@ export default defineConfig({
 });
 ```
 
-Panda CSS のサポートする`token()` 関数で実行時のトークンの生の値をクエリできる
+- `token()` 関数では、`token`のランタイムの値を直接参照することができる
 
 ```tsx
 import { useState } from "react";
@@ -128,52 +137,6 @@ const App = () => {
 };
 ```
 
-- css カスタムプロパティの参照を取得する
-
-```tsx
-import { useState } from "react";
-import { token } from "../styled-system/tokens";
-
-const Component = (props) => {
-  return (
-    <div
-      style={{
-        // ✅ Good: Dynamically generate CSS custom property from the token
-        color: token.var(`colors.${props.color}`),
-      }}
-    >
-      Dynamic color with runtime value
-    </div>
-  );
-};
-
-const App = () => {
-  const [runtimeColor, setRuntimeColor] = useState("yellow.300");
-
-  return <Component color={runtimeColor} />;
-};
-```
-
-- props を渡す
-
-> すべての prop-value ペアが静的に抽出可能である限り、Panda は自動的に CSS を生成する
-
-```tsx
-import { styled } from "../styled-system/jsx";
-
-const Card = (props) => {
-  return <styled.div px="4" py="3" {...props} />;
-};
-
-const App = () => {
-  return (
-    <Card color="blue.300">
-      <p>Some content</p>
-    </Card>
-  );
-};
-```
-
 **参考資料**
 
 - [Dynamic styling](https://panda-css.com/docs/guides/dynamic-styling)
@@ -181,6 +144,7 @@ const App = () => {
 ## 例 : 動的に style を書き換える
 
 ```tsx
+// ビルド時にスタイル値を静的解析できるようにし、動的スタイリングを行なっている
 import React, { useState } from "react";
 import { css } from "@/styled-system/css";
 
