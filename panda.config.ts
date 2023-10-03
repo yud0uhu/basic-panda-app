@@ -2,7 +2,7 @@ import { defineConfig } from "@pandacss/dev";
 import { createStitches, type PropertyValue } from "@stitches/react";
 export default defineConfig({
   preflight: true,
-  include: ["./src/**/*.{js,jsx,ts,tsx}", "./pages/**/*.{js,jsx,ts,tsx}"],
+  include: ["./example/**/*.{js,jsx,ts,tsx}", "./pages/**/*.{js,jsx,ts,tsx}"],
   exclude: [],
   theme: {
     extend: {
